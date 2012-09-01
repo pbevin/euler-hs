@@ -40,6 +40,8 @@ reverseNum = foldl join 0 . unfoldr unjoin
 --palindrome n = n == reverseNum n
 palindrome n = (show n) == (reverse $ show n)
 
+square n = n * n
+
 eu 1 = sum $ [x | x <- [1..999], x `mod` 3 == 0 || x `mod` 5 == 0]
 eu 2 = sum $ filter even $ takeWhile (< 4000000) fibs
 eu 3 = last $ factorize 600851475143
@@ -51,18 +53,21 @@ eu 3 = last $ factorize 600851475143
 -- so one of a and b must have a factor 11.
 eu 4 = maximum $ filter palindrome [a*b | a <- [110,121..999], b <- [a..999]]
 eu 5 = foldr lcm 1 [1..20]
+eu 6 = sqs - ssq
+  where ssq = sum (map square [1..100])
+        sqs = square (sum [1..100])
 
-solutions = [233168, 4613732, 6857, 906609, 232792560]
+solutions = [233168, 4613732, 6857, 906609, 232792560, 25164150]
 
 test :: [String]
-test = check solutions $ map eu [1..5]
+test = check solutions $ map eu [1..6]
   where
     diffs :: Integer -> [Integer] -> [Integer] -> [String]
     diffs n [] [] = []
     diffs n (a:as) (b:bs)
       | a == b    = diffs (n+1) as bs
       | otherwise = msg : diffs (n+1) as bs
-      where msg = (show n) ++ ": got " ++ (show a) ++ ", should be " ++ (show b)
+      where msg = (show n) ++ ": expected " ++ (show a) ++ ", but got " ++ (show b)
 
     check :: [Integer] -> [Integer] -> [String]
     check as bs = if as == bs
