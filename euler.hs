@@ -56,11 +56,12 @@ eu 5 = foldr lcm 1 [1..20]
 eu 6 = sqs - ssq
   where ssq = sum (map square [1..100])
         sqs = square (sum [1..100])
+eu 7 = primes !! 10000
 
-solutions = [233168, 4613732, 6857, 906609, 232792560, 25164150]
+solutions = [233168, 4613732, 6857, 906609, 232792560, 25164150, 104743]
 
 test :: [String]
-test = check solutions $ map eu [1..6]
+test = check solutions $ map eu [1..7]
   where
     diffs :: Integer -> [Integer] -> [Integer] -> [String]
     diffs n [] [] = []
