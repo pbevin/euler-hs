@@ -1,3 +1,5 @@
+import Data.List
+
 -- Stream of Fibonacci numbers
 fibs :: [Integer]
 fibs = 1:1:(zipWith (+) fibs (tail fibs))
@@ -28,14 +30,31 @@ factorize n = factors primes n
       | n `mod` p == 0 = p : factors (p:ps) (n `div` p)
       | otherwise      = factors ps n
 
+--palindrome :: Integer -> Boolean
+
+reverseNum = foldl join 0 . unfoldr unjoin
+  where unjoin 0 = Nothing
+        unjoin n = Just (n `mod` 10, n `div` 10)
+        join x a = x * 10 + a
+
+--palindrome n = n == reverseNum n
+palindrome n = (show n) == (reverse $ show n)
+
 eu 1 = sum $ [x | x <- [1..999], x `mod` 3 == 0 || x `mod` 5 == 0]
 eu 2 = sum $ filter even $ takeWhile (< 4000000) fibs
 eu 3 = last $ factorize 600851475143
 
-solutions = [233168, 4613732, 6857]
+-- Note on problem 4: the palindrome is:
+--     100000a + 10000b + 1000c + 100c + 10b + a
+--   = 100001a + 10010b + 1100c
+--   = 11(9091a + 910b + 100c)
+-- so one of a and b must have a factor 11.
+eu 4 = maximum $ filter palindrome [a*b | a <- [110,121..999], b <- [a..999]]
+
+solutions = [233168, 4613732, 6857, 906609]
 
 test :: [String]
-test = check solutions $ map eu [1..3]
+test = check solutions $ map eu [1..4]
   where
     diffs :: Integer -> [Integer] -> [Integer] -> [String]
     diffs n [] [] = []
@@ -48,3 +67,5 @@ test = check solutions $ map eu [1..3]
     check as bs = if as == bs
                   then ["OK"]
                   else diffs 1 as bs
+
+
