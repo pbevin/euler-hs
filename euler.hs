@@ -67,6 +67,9 @@ eu 6 = sqs - ssq
         sqs = square (sum [1..100])
 eu 7 = primes !! 10000
 eu 8 = maximum $ map (foldr (*) 1) $ inGroupsOf 5 prob8data
+eu 9 = head $ [ a * b * c | a <- [1..1000], b <- [a..1000], c <- isqrt(a*a+b*b), a+b+c == 1000 ]
+  where isqrt n = if i * i == n then [i] else []
+                    where i = toInteger $ floor $ sqrt $ fromIntegral n
 
 solutions = [233168, 4613732, 6857, 906609, 232792560, 25164150, 104743, 40824]
 
