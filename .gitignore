@@ -1,6 +1,8 @@
 dist
 cabal-dev
+euler
 *.o
 *.hi
 *.chi
 *.chs.h
+*.swp
