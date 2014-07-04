@@ -90,19 +90,15 @@ eu 9 = head $ [ a * b * c | a <- [1..1000], b <- [a..1000], c <- isqrt(a*a+b*b),
   where isqrt n = if i * i == n then [i] else []
                     where i = toInteger $ floor $ sqrt $ fromIntegral n
 eu 10 = sum $ primesUpTo 2000000
+eu 11 = eu11 nums11
 
--- eu11 = maximum $ map product $ concat $ map fours [nums11, transpose nums11, diags nums11, (diags . transpose) nums11]
---   where fours = drop 4 . map (take 4) . tails
+eu11 xs = maximum $ map product $ concat $ map fours $ concat [xs, transpose xs, diags xs, (diags . reverse) xs]
+   where fours = filter (hasLength 4) . map (take 4) . tails
+         hasLength n xs = length xs == n
 
 diags :: [[a]] -> [[a]]
-diags [] = []
-diags [xs] = [ [x] | x <- xs ]
-diags (xs:xss) = [ head xs ] : splat (tail xs) (diags xss)
-
-splat :: [a] -> [[a]] -> [[a]]
-splat [] [] = []
-splat [] (x:xs) = [x]:splat [] xs
-splat [x:xs] [y:ys] = (x:y):splat xs ys
+diags xs = diags' xs ++ tail (diags' $ transpose xs)
+  where diags' as = transpose $ zipWith drop [0..length as - 1] as
 
 grid11 :: [String]
 grid11 = ["08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08",
@@ -130,7 +126,7 @@ nums11 :: [[Integer]]
 nums11 = map (map read . words) grid11
 
 
-solutions = [233168, 4613732, 6857, 906609, 232792560, 25164150, 104743, 40824, 31875000, 142913828922]
+solutions = [233168, 4613732, 6857, 906609, 232792560, 25164150, 104743, 40824, 31875000, 142913828922, 70600674]
 
 runTest :: (Integer, Integer) -> IO ()
 runTest (id, expected) = do
